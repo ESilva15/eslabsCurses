@@ -3,21 +3,24 @@
 
 #include "Arduino_GFX.h"
 #include "UIDecorations.h"
+#include "UIDimensions.h"
+#include <cstdint>
 #include <stdint.h>
+
+#define MAX_WINDOWS 512
+#define MAX_CHILDREN 32
 
 enum ComponentType {
   STRING,
   TABLE,
 };
 
-struct UIDimensions {
-  uint16_t x = 0, y = 0;
-  uint16_t width = 0, height = 0;
+class UIElement {
+private:
+  uint8_t childrenCount = 0;
+  int8_t curChildIndex = -1; // Start at -1, have no children
 
-  UIDimensions(uint16_t x, uint16_t y, uint16_t w, uint16_t h);
-};
-
-struct UIElement {
+public:
   Arduino_GFX *display;
   UIDimensions dims;
   UIDecorations *decor;
@@ -26,8 +29,16 @@ struct UIElement {
   uint16_t refreshRate = 0;
   ComponentType type;
 
+  UIElement();
   UIElement(Arduino_GFX *d, UIDimensions dims, UIDecorations *decor,
             char *Title);
+
+  // Children
+  UIElement* children[MAX_CHILDREN];
+
+  // Children Handling
+  UIElement* AddChild();
+  uint8_t ChildrenCount();
 
   // Getters
   int16_t getContentAreaX0();
@@ -50,6 +61,13 @@ struct UIElement {
   void drawBox();
   void noBox();
   void replaceString(char *oldVal, char *newVal);
+};
+
+namespace WindowPool {
+  extern UIElement pool[MAX_WINDOWS];
+  extern uint16_t poolIndex;
+
+  UIElement* Allocate();
 };
 
 #endif

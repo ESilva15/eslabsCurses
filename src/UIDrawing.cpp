@@ -50,6 +50,7 @@ void UIElement::placeLeft(UIElement *ref) {
 }
 
 void UIElement::drawBox() {
+  Serial2.println("Drawing box!");
   // This is the border rectangle
   if (this->decor->hasBorder) {
     for (int k = 0; k < DEFAULT_BORDER_THICKNESS; k++) {
@@ -59,15 +60,18 @@ void UIElement::drawBox() {
     }
   }
 
+  Serial2.println("Debug1");
   // For debugging purpouses
   // title area
   int16_t x = 0, y = 0;
   uint16_t w = 0, h = 0;
 
+  Serial2.println("Debug2");
   // U8G2 u8g2;  // No display pin setup needed since we're only using font data
   // u8g2.setFont(u8g2_font_9x18_tf);
   // int ascent = u8g2.getAscent();
 
+  Serial2.println("Debug3");
   h = this->getTitleAreaHeight();
   uint16_t titleAreaWidth = this->getTitleAreaWidth();
   int16_t titleTopLeftX = this->getTitleAreaX0();
@@ -77,6 +81,7 @@ void UIElement::drawBox() {
                           h, GREEN);
 #endif
 
+  Serial2.println("Debug4");
   // content area
   x = this->getContentAreaX0();
   y = this->getContentAreaY0();
@@ -88,16 +93,20 @@ void UIElement::drawBox() {
   this->display->drawRect(x, y, w, h, BLUE);
 #endif
 
+  Serial2.println("Debug5");
   if (this->decor->hasBorder) {
     // Remove the border line behind the title
     this->display->fillRect(titleTopLeftX - DEFAULT_MARGIN, this->dims.y,
                             titleAreaWidth + DEFAULT_MARGIN,
                             DEFAULT_BORDER_THICKNESS, MAIN_BG_COLOR);
 
+    Serial2.println("Debug6");
     // Render the title
     this->display->setCursor(titleTopLeftX, this->dims.y);
     this->display->print(this->title);
   }
+
+  Serial2.println("Debug7");
 
 #ifdef DEBUG
   // Element bounds

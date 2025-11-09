@@ -8,6 +8,9 @@
 
 #define DEBUG 1
 
+UIElement::UIElement()
+    : display(nullptr), dims(UIDimensions(0, 0, 0, 0)), decor(nullptr), title(nullptr) {}
+
 UIElement::UIElement(Arduino_GFX *d, UIDimensions dims, UIDecorations *decor,
                      char *title)
     : display(d), dims(dims), decor(decor), title(title) {}
@@ -82,7 +85,7 @@ void UIElement::replaceString(char *oldVal, char *newVal) {
   if (oldValLen > newValLen) {
     // If the old value is longer than the new value, we have to delete the
     // extra of the old value, which is whatever starts at the new value len
-    for (size_t start = newValLen; start < oldValLen; start++) {
+    for (std::size_t start = newValLen; start < oldValLen; start++) {
       this->display->setCursor(x0 + start * (CHR_WIDTH(this->decor->textSize)),
                                y0);
       this->display->setTextColor(this->decor->bgColor);
@@ -90,7 +93,7 @@ void UIElement::replaceString(char *oldVal, char *newVal) {
     }
   }
 
-  for (size_t k = 0; k < newValLen; k++) {
+  for (std::size_t k = 0; k < newValLen; k++) {
     if (k <= oldValLen) {
       if (oldVal[k] != newVal[k]) {
         this->display->setCursor(x0 + k * (CHR_WIDTH(this->decor->textSize)),
@@ -106,3 +109,39 @@ void UIElement::replaceString(char *oldVal, char *newVal) {
     this->display->print(newVal[k]);
   }
 }
+
+UIElement* UIElement::AddChild() {
+  if (childrenCount >= MAX_CHILDREN) {
+    return nullptr;
+  }
+
+  UIElement* newElem = WindowPool::Allocate();
+  if (!newElem) {
+    return newElem;
+  }
+
+  this->children[this->curChildIndex] = newElem;
+  this->childrenCount++;
+  this->curChildIndex++;
+
+  return newElem;
+}
+
+std::uint8_t UIElement::ChildrenCount() {
+  return this->childrenCount;
+}
+
+namespace WindowPool {
+  UIElement pool[MAX_WINDOWS];
+  uint16_t poolIndex = 0;
+
+  UIElement* Allocate() {
+    if (poolIndex >= MAX_WINDOWS) {
+      return nullptr;
+    }
+
+    return &pool[poolIndex];
+    poolIndex++;
+  }
+}
+
