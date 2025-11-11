@@ -16,6 +16,7 @@ public:
 
   int16_t mainWindowID;
   Screen(Arduino_GFX *d, UIDimensions dims, UIDecorations decor);
+  void Setup();
 };
 }; // namespace Curses
 
