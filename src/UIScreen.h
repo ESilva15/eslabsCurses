@@ -13,6 +13,8 @@ public:
   UIDimensions dims;
   UIDecorations decor;
   Arduino_GFX *display;
+
+  int16_t mainWindowID;
   Screen(Arduino_GFX *d, UIDimensions dims, UIDecorations decor);
 };
 }; // namespace Curses

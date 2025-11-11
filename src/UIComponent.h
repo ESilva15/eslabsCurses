@@ -9,6 +9,7 @@
 
 #define MAX_WINDOWS 512
 #define MAX_CHILDREN 32
+#define MAX_TITLE_LEN 32
 
 enum ComponentType {
   STRING,
@@ -24,7 +25,7 @@ public:
   Arduino_GFX *display;
   UIDimensions dims;
   UIDecorations *decor;
-  char *title;
+  char title[MAX_TITLE_LEN];
   uint64_t lastUpdate = 0;
   uint16_t refreshRate = 0;
   ComponentType type;
@@ -34,10 +35,11 @@ public:
             char *Title);
 
   // Children
-  UIElement* children[MAX_CHILDREN];
+  int16_t children[MAX_CHILDREN];
 
   // Children Handling
-  UIElement* AddChild();
+  bool AddChild();
+  UIElement* GetChild(int16_t childID);
   uint8_t ChildrenCount();
 
   // Getters
@@ -49,6 +51,9 @@ public:
   int16_t getTitleAreaY0();
   uint16_t getTitleAreaHeight();
   uint16_t getTitleAreaWidth();
+
+  // Setters
+  void SetTitle(char* format, ...);
 
   // Positioning
   void horizontalCenter(UIElement *reference);
@@ -65,9 +70,10 @@ public:
 
 namespace WindowPool {
   extern UIElement pool[MAX_WINDOWS];
-  extern uint16_t poolIndex;
+  extern int16_t poolIndex;
 
-  UIElement* Allocate();
+  int16_t Allocate();
+  UIElement* GetHandle(int16_t index);
 };
 
 #endif

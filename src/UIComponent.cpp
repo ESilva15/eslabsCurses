@@ -4,16 +4,20 @@
 #include "HardwareSerial.h"
 #include "UIDrawing.h"
 // #include <U8g2lib.h>
+#include <cstdarg>
 #include <cstdint>
+#include <cstring>
 
 #define DEBUG 1
 
 UIElement::UIElement()
-    : display(nullptr), dims(UIDimensions(0, 0, 0, 0)), decor(nullptr), title(nullptr) {}
+    : display(nullptr), dims(UIDimensions(0, 0, 0, 0)), decor(nullptr) {}
 
 UIElement::UIElement(Arduino_GFX *d, UIDimensions dims, UIDecorations *decor,
                      char *title)
-    : display(d), dims(dims), decor(decor), title(title) {}
+    : display(d), dims(dims), decor(decor) {
+  strncpy(this->title, title, MAX_TITLE_LEN);
+}
 
 UIDimensions::UIDimensions(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
     : x(x), y(y), width(w), height(h) {}
@@ -70,6 +74,13 @@ uint16_t UIElement::getTitleAreaWidth() {
   return w;
 }
 
+void UIElement::SetTitle(char* format, ...) {
+  va_list args;
+  va_start(args, format);
+  vsnprintf(this->title, MAX_TITLE_LEN, format, args);
+  va_end(args);
+}
+
 void UIElement::replaceString(char *oldVal, char *newVal) {
   size_t newValLen = strlen(newVal);
   size_t oldValLen = strlen(oldVal);
@@ -110,21 +121,30 @@ void UIElement::replaceString(char *oldVal, char *newVal) {
   }
 }
 
-UIElement* UIElement::AddChild() {
+bool UIElement::AddChild() {
   if (childrenCount >= MAX_CHILDREN) {
-    return nullptr;
+    Serial2.println("Failed to add child: childrenCount exceeds MAX_CHILDREN");
+    Serial2.print(  childrenCount);
+    Serial2.print(  " >= ");
+    Serial2.print(  MAX_CHILDREN);
+    return false;
   }
 
-  UIElement* newElem = WindowPool::Allocate();
-  if (!newElem) {
-    return newElem;
+  int16_t newElem = WindowPool::Allocate();
+  if (newElem < 0) {
+    Serial2.println("Failed to allocate new component");
+    return false;
   }
 
   this->children[this->curChildIndex] = newElem;
   this->childrenCount++;
   this->curChildIndex++;
 
-  return newElem;
+  return true;
+}
+
+UIElement* UIElement::GetChild(int16_t childID) {
+  return WindowPool::GetHandle(childID);
 }
 
 std::uint8_t UIElement::ChildrenCount() {
@@ -133,15 +153,23 @@ std::uint8_t UIElement::ChildrenCount() {
 
 namespace WindowPool {
   UIElement pool[MAX_WINDOWS];
-  uint16_t poolIndex = 0;
+  int16_t poolIndex = 0;
 
-  UIElement* Allocate() {
+  int16_t Allocate() {
     if (poolIndex >= MAX_WINDOWS) {
-      return nullptr;
+      Serial2.println("Failed to allocate comp: poolIndex exceeds MAX_WINDOWS");
+      Serial2.print(  poolIndex);
+      Serial2.print(  " >= ");
+      Serial2.print(  MAX_WINDOWS);
+      return -1;
     }
 
-    return &pool[poolIndex];
+    return poolIndex;
     poolIndex++;
+  }
+
+  UIElement* GetHandle(int16_t id) {
+    return &pool[poolIndex];
   }
 }
 
