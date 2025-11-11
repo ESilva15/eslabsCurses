@@ -9,7 +9,7 @@ struct UIBar : UIElement {
   uint32_t value = 0; // current tach value
   uint8_t range = 0;  // define the tach range, ie: 8 for 8000rpm
 
-  UIBar(Arduino_GFX *d, UIDimensions dims, UIDecorations *decor, char *title);
+  UIBar(Arduino_GFX *d, UIDimensions dims, UIDecorations decor, char *title);
 
   void Update(char *val);
   void DrawBar(uint32_t *oldValue, uint32_t *newValue);

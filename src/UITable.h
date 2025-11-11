@@ -18,7 +18,7 @@ struct UITable : UIElement {
   int *colWidths;
   UIString **tableData;
 
-  UITable(Arduino_GFX *gfx, UIDimensions dims, UIDecorations *decor, int nR,
+  UITable(Arduino_GFX *gfx, UIDimensions dims, UIDecorations decor, int nR,
           int nC, int *cWidth, char *t);
 
   // void Update(StandingLine standings[5]);

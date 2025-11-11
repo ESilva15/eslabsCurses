@@ -11,19 +11,16 @@
 #define DEBUG 1
 
 UIElement::UIElement()
-    : display(nullptr), dims(UIDimensions(0, 0, 0, 0)), decor(nullptr) {}
+    : display(nullptr), dims(UIDimensions(0, 0, 0, 0)), decor(UIDecorations()) {}
 
-UIElement::UIElement(Arduino_GFX *d, UIDimensions dims, UIDecorations *decor,
+UIElement::UIElement(Arduino_GFX *d, UIDimensions dims, UIDecorations decor,
                      char *title)
     : display(d), dims(dims), decor(decor) {
   strncpy(this->title, title, MAX_TITLE_LEN);
 }
 
-UIDimensions::UIDimensions(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
-    : x(x), y(y), width(w), height(h) {}
-
 int16_t UIElement::getContentAreaX0() {
-  if (this->decor->hasBorder) {
+  if (this->decor.hasBorder) {
     return this->dims.x + DEFAULT_BORDER_THICKNESS + DEFAULT_MARGIN;
   }
 
@@ -31,7 +28,7 @@ int16_t UIElement::getContentAreaX0() {
 }
 
 int16_t UIElement::getContentAreaY0() {
-  if (this->decor->hasBorder) {
+  if (this->decor.hasBorder) {
     return this->dims.y + this->getTitleAreaHeight() +
            DEFAULT_TITLE_CONTENT_SPACING;
   }
@@ -58,7 +55,7 @@ uint16_t UIElement::getTitleAreaHeight() {
   int16_t x = 0, y = 0;
   uint16_t w = 0, h = 0;
 
-  this->display->setTextSize(this->decor->titleSize);
+  this->display->setTextSize(this->decor.titleSize);
   this->display->getTextBounds((const char *)this->title, 0, 0, &x, &y, &w, &h);
 
   return h;
@@ -68,7 +65,7 @@ uint16_t UIElement::getTitleAreaWidth() {
   int16_t x = 0, y = 0;
   uint16_t w = 0, h = 0;
 
-  this->display->setTextSize(this->decor->titleSize);
+  this->display->setTextSize(this->decor.titleSize);
   this->display->getTextBounds((const char *)this->title, 0, 0, &x, &y, &w, &h);
 
   return w;
@@ -81,6 +78,18 @@ void UIElement::SetTitle(char* format, ...) {
   va_end(args);
 }
 
+void UIElement::SetUIDecorations(UIDecorations decor) {
+  this->decor = decor;
+}
+
+void UIElement::SetUIDimensions(UIDimensions dims) {
+  this->dims = dims;
+}
+
+void UIElement::SetDisplay(Arduino_GFX *d) {
+  this->display = d;
+}
+
 void UIElement::replaceString(char *oldVal, char *newVal) {
   size_t newValLen = strlen(newVal);
   size_t oldValLen = strlen(oldVal);
@@ -90,16 +99,16 @@ void UIElement::replaceString(char *oldVal, char *newVal) {
   int16_t y0 = this->getContentAreaY0(); // <- Crashes here
   // Before here
 
-  this->display->setTextSize(this->decor->textSize);
+  this->display->setTextSize(this->decor.textSize);
 
   // If the new value is shorter, delete the extra in advance
   if (oldValLen > newValLen) {
     // If the old value is longer than the new value, we have to delete the
     // extra of the old value, which is whatever starts at the new value len
     for (std::size_t start = newValLen; start < oldValLen; start++) {
-      this->display->setCursor(x0 + start * (CHR_WIDTH(this->decor->textSize)),
+      this->display->setCursor(x0 + start * (CHR_WIDTH(this->decor.textSize)),
                                y0);
-      this->display->setTextColor(this->decor->bgColor);
+      this->display->setTextColor(this->decor.bgColor);
       this->display->print(oldVal[start]);
     }
   }
@@ -107,16 +116,16 @@ void UIElement::replaceString(char *oldVal, char *newVal) {
   for (std::size_t k = 0; k < newValLen; k++) {
     if (k <= oldValLen) {
       if (oldVal[k] != newVal[k]) {
-        this->display->setCursor(x0 + k * (CHR_WIDTH(this->decor->textSize)),
+        this->display->setCursor(x0 + k * (CHR_WIDTH(this->decor.textSize)),
                                  y0 + 0);
-        this->display->setTextColor(this->decor->bgColor);
+        this->display->setTextColor(this->decor.bgColor);
         this->display->print(oldVal[k]);
       }
     }
 
-    this->display->setCursor(x0 + k * (CHR_WIDTH(this->decor->textSize)),
+    this->display->setCursor(x0 + k * (CHR_WIDTH(this->decor.textSize)),
                              y0 + 0);
-    this->display->setTextColor(this->decor->fgColor);
+    this->display->setTextColor(this->decor.fgColor);
     this->display->print(newVal[k]);
   }
 }

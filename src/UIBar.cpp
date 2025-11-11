@@ -1,7 +1,7 @@
 #include "UIBar.h"
 #include "UIDrawing.h"
 
-UIBar::UIBar(Arduino_GFX *d, UIDimensions dims, UIDecorations *decor,
+UIBar::UIBar(Arduino_GFX *d, UIDimensions dims, UIDecorations decor,
              char *title)
     : UIElement(d, dims, decor, title) {}
 
@@ -95,10 +95,10 @@ void UIBar::Box() {
 
     char legend[5];
     sprintf(legend, "%d", k);
-    this->display->setCursor(x - (CHR_WIDTH(this->decor->textSize) / 2),
+    this->display->setCursor(x - (CHR_WIDTH(this->decor.textSize) / 2),
                              this->dims.y + this->dims.height + 7 + 2);
     this->display->setTextColor(WHITE);
-    this->display->setTextSize(this->decor->textSize);
+    this->display->setTextSize(this->decor.textSize);
     this->display->print(legend);
   }
 }

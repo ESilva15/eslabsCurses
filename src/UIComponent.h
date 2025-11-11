@@ -24,14 +24,14 @@ private:
 public:
   Arduino_GFX *display;
   UIDimensions dims;
-  UIDecorations *decor;
+  UIDecorations decor;
   char title[MAX_TITLE_LEN];
   uint64_t lastUpdate = 0;
   uint16_t refreshRate = 0;
   ComponentType type;
 
   UIElement();
-  UIElement(Arduino_GFX *d, UIDimensions dims, UIDecorations *decor,
+  UIElement(Arduino_GFX *d, UIDimensions dims, UIDecorations decor,
             char *Title);
 
   // Children
@@ -54,6 +54,9 @@ public:
 
   // Setters
   void SetTitle(char* format, ...);
+  void SetUIDecorations(UIDecorations decor);
+  void SetUIDimensions(UIDimensions dims);
+  void SetDisplay(Arduino_GFX *d);
 
   // Positioning
   void horizontalCenter(UIElement *reference);

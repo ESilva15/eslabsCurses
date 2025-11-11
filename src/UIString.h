@@ -9,7 +9,7 @@ struct UIString : UIElement {
   char value[bufferSize];
 
   UIString();
-  UIString(Arduino_GFX *d, UIDimensions dims, UIDecorations *decor,
+  UIString(Arduino_GFX *d, UIDimensions dims, UIDecorations decor,
            char *title);
   void Update(const char *value);
 };

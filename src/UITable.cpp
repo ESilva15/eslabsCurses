@@ -6,7 +6,7 @@
 
 #define DEBUG
 
-UITable::UITable(Arduino_GFX *gfx, UIDimensions dims, UIDecorations *decor,
+UITable::UITable(Arduino_GFX *gfx, UIDimensions dims, UIDecorations decor,
                  int nRows, int nCols, int *colWidths, char *title)
     : UIElement(gfx, dims, decor, title) {
   this->type = TABLE;
@@ -16,18 +16,18 @@ UITable::UITable(Arduino_GFX *gfx, UIDimensions dims, UIDecorations *decor,
   this->colWidths = colWidths;
 
   // Default decoration for every cell
-  this->decor->textSize = 2;
+  this->decor.textSize = 2;
 
   for (int k = 0; k < ROWS * COLUMNS; k++) {
-    UIDecorations *cellDecor = new UIDecorations();
-    cellDecor->textSize = this->decor->textSize;
+    UIDecorations cellDecor = UIDecorations();
+    cellDecor.textSize = this->decor.textSize;
 
     UIDimensions dims = {0, 0, 0, 0};
 
     this->tableData[k] = new UIString(display, dims, cellDecor, (char *)"");
   }
 
-  int cellH = CHR_HEIGHT(this->decor->textSize) + CELL_MARGIN;
+  int cellH = CHR_HEIGHT(this->decor.textSize) + CELL_MARGIN;
 
   // Initialize the table dimensions
   //// Calculate the height
@@ -37,7 +37,7 @@ UITable::UITable(Arduino_GFX *gfx, UIDimensions dims, UIDecorations *decor,
   //// Calculate the width
   for (int c = 0; c < this->nColumns; c++) {
     this->dims.width +=
-        (CHR_WIDTH(this->decor->textSize) + CELL_MARGIN) * this->colWidths[c];
+        (CHR_WIDTH(this->decor.textSize) + CELL_MARGIN) * this->colWidths[c];
   }
   this->dims.width += (DEFAULT_BORDER_THICKNESS + DEFAULT_MARGIN) * 2;
 }
@@ -52,7 +52,7 @@ uint16_t UITable::getContentAreaHeight() {
  * I recon its dynamic enough for now
  */
 void UITable::setup() {
-  int cellH = CHR_HEIGHT(this->decor->textSize) + CELL_MARGIN;
+  int cellH = CHR_HEIGHT(this->decor.textSize) + CELL_MARGIN;
 
   // Initialize the cells
   uint16_t yOffset = this->getContentAreaY0();
@@ -60,18 +60,18 @@ void UITable::setup() {
     int16_t xOffset = this->getContentAreaX0();
     for (int c = 0; c < COLUMNS; c++) {
       this->tableData[r * COLUMNS + c]->refreshRate = this->refreshRate;
-      this->tableData[r * COLUMNS + c]->decor->textSize = this->decor->textSize;
-      this->tableData[r * COLUMNS + c]->decor->hasBorder = false;
+      this->tableData[r * COLUMNS + c]->decor.textSize = this->decor.textSize;
+      this->tableData[r * COLUMNS + c]->decor.hasBorder = false;
       this->tableData[r * COLUMNS + c]->dims.x = xOffset + CELL_MARGIN;
       this->tableData[r * COLUMNS + c]->dims.y = (cellH * r) + yOffset;
       this->tableData[r * COLUMNS + c]->dims.height = cellH;
       this->tableData[r * COLUMNS + c]->dims.width =
-          this->colWidths[c] * (CHR_WIDTH(this->decor->textSize) + CELL_MARGIN);
+          this->colWidths[c] * (CHR_WIDTH(this->decor.textSize) + CELL_MARGIN);
       memset(this->tableData[r * COLUMNS + c]->value, 0,
              this->tableData[r * COLUMNS + c]->bufferSize);
 
       xOffset +=
-          this->colWidths[c] * (CHR_WIDTH(this->decor->textSize) + CELL_MARGIN);
+          this->colWidths[c] * (CHR_WIDTH(this->decor.textSize) + CELL_MARGIN);
 
 #ifdef DEBUG
       this->tableData[r * COLUMNS + c]->drawBox();

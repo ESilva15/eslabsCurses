@@ -3,12 +3,12 @@
 #include "UIComponent.h"
 #include <Arduino_GFX.h>
 
-UIString::UIString() : UIElement(nullptr, {0, 0, 0, 0}, nullptr, (char *)"") {
+UIString::UIString() : UIElement(nullptr, {0, 0, 0, 0}, UIDecorations(), (char *)"") {
   this->type = STRING;
   memset(this->value, 0, this->bufferSize);
 }
 
-UIString::UIString(Arduino_GFX *d, UIDimensions dims, UIDecorations *decor,
+UIString::UIString(Arduino_GFX *d, UIDimensions dims, UIDecorations decor,
                    char *title)
     : UIElement(d, dims, decor, title) {
   this->type = STRING;

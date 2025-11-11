@@ -51,11 +51,11 @@ void UIElement::placeLeft(UIElement *ref) {
 
 void UIElement::drawBox() {
   // This is the border rectangle
-  if (this->decor->hasBorder) {
+  if (this->decor.hasBorder) {
     for (int k = 0; k < DEFAULT_BORDER_THICKNESS; k++) {
       this->display->drawRect(
           this->dims.x + k, this->dims.y + k, this->dims.width - (k * 2),
-          this->dims.height - (k * 2), this->decor->borderColor);
+          this->dims.height - (k * 2), this->decor.borderColor);
     }
   }
 
@@ -88,7 +88,7 @@ void UIElement::drawBox() {
   this->display->drawRect(x, y, w, h, BLUE);
 #endif
 
-  if (this->decor->hasBorder) {
+  if (this->decor.hasBorder) {
     // Remove the border line behind the title
     this->display->fillRect(titleTopLeftX - DEFAULT_MARGIN, this->dims.y,
                             titleAreaWidth + DEFAULT_MARGIN,

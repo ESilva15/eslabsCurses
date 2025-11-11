@@ -15,8 +15,9 @@ public:
   Arduino_GFX *display;
 
   int16_t mainWindowID;
+  UIElement* mainWindowHandle;
   Screen(Arduino_GFX *d, UIDimensions dims, UIDecorations decor);
-  void Setup();
+  void Setup(const char* title);
 };
 }; // namespace Curses
 
