@@ -73,10 +73,19 @@ public:
 
 namespace WindowPool {
   extern UIElement pool[MAX_WINDOWS];
-  extern int16_t poolIndex;
+  // extern int16_t poolIndex;
+  extern bool inUse[MAX_WINDOWS];
+
+  // I need to add a list of available IDs
+  // And maybe a list of unavailable IDs or just create a custome type
+  // then make a list of that custom and have a bool saying if its available or not
+  // Although having a list of available IDs is best
 
   int16_t Allocate();
   UIElement* GetHandle(int16_t index);
+  
+  // Debugging
+  void PrintInUse();
 };
 
 #endif

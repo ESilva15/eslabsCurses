@@ -162,23 +162,47 @@ std::uint8_t UIElement::ChildrenCount() {
 
 namespace WindowPool {
   UIElement pool[MAX_WINDOWS];
-  int16_t poolIndex = 0;
+  bool inUse[MAX_WINDOWS] = {false};
+  // int16_t poolIndex = 0;
+
+  static inline int16_t getNextIndex() {
+    for (int k = 0; k < MAX_WINDOWS; k++) {
+      if (!inUse[k]) {
+        return k;
+      }
+    }
+
+    return -1;
+  }
 
   int16_t Allocate() {
-    if (poolIndex >= MAX_WINDOWS) {
+    int16_t nextIndex = getNextIndex();
+    if (nextIndex < 0) {
       Serial2.println("Failed to allocate comp: poolIndex exceeds MAX_WINDOWS");
-      Serial2.print(  poolIndex);
+      Serial2.print(  nextIndex);
       Serial2.print(  " >= ");
-      Serial2.print(  MAX_WINDOWS);
+      Serial2.println(  MAX_WINDOWS);
       return -1;
     }
 
-    return poolIndex;
-    poolIndex++;
+    // Mark it as in use
+    inUse[nextIndex] = true;
+
+    return nextIndex;
   }
 
   UIElement* GetHandle(int16_t id) {
-    return &pool[poolIndex];
+    return &pool[id];
+  }
+
+  void PrintInUse() {
+    for (int k = 0; k < MAX_WINDOWS; k++) {
+      if (inUse[k]) {
+        Serial2.print(k);
+        Serial2.print(" : ");
+        Serial2.println(inUse[k]);
+      }
+    }
   }
 }
 
