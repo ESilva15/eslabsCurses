@@ -163,7 +163,6 @@ std::uint8_t UIElement::ChildrenCount() {
 namespace WindowPool {
   UIElement pool[MAX_WINDOWS];
   bool inUse[MAX_WINDOWS] = {false};
-  // int16_t poolIndex = 0;
 
   static inline int16_t getNextIndex() {
     for (int k = 0; k < MAX_WINDOWS; k++) {
@@ -189,6 +188,14 @@ namespace WindowPool {
     inUse[nextIndex] = true;
 
     return nextIndex;
+  }
+
+  void Deallocate(int16_t id) {
+    pool[id].SetTitle((char*)"");
+    pool[id].SetUIDimensions(UIDimensions(0, 0, 0, 0));
+    pool[id].SetUIDecorations(UIDecorations());
+
+    inUse[id] = false;
   }
 
   UIElement* GetHandle(int16_t id) {
