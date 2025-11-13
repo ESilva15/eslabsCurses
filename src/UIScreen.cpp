@@ -1,4 +1,5 @@
 #include "UIScreen.h"
+#include "windowPool.h"
 #include "UIComponent.h"
 #include "UIDecorations.h"
 #include "UIDimensions.h"
@@ -10,7 +11,7 @@ Curses::Screen::Screen(Arduino_GFX *d, UIDimensions dims,
 
 void Curses::Screen::Setup(const char* title) {
   // This should always return the first available component
-  this->mainWindowID = WindowPool::Allocate();
+  this->mainWindowID = WindowPool::Allocate(BASE);
   if (this->mainWindowID != 0) {
     // Something wrong happened
     Serial2.print("Unexpected ID for main window: ");

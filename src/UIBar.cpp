@@ -1,6 +1,8 @@
 #include "UIBar.h"
+#include "UIComponent.h"
 #include "UIDrawing.h"
 
+UIBar::UIBar() {};
 UIBar::UIBar(Arduino_GFX *d, UIDimensions dims, UIDecorations decor,
              char *title)
     : UIElement(d, dims, decor, title) {}

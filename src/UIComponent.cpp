@@ -1,4 +1,6 @@
 #include "UIComponent.h"
+#include "values.h"
+#include "windowPool.h"
 // #include "u8g2.h"
 #include "Arduino.h"
 #include "HardwareSerial.h"
@@ -130,7 +132,7 @@ void UIElement::replaceString(char *oldVal, char *newVal) {
   }
 }
 
-bool UIElement::AddChild() {
+bool UIElement::AddChild(ComponentType t) {
   if (childrenCount >= MAX_CHILDREN) {
     Serial2.println("Failed to add child: childrenCount exceeds MAX_CHILDREN");
     Serial2.print(  childrenCount);
@@ -139,7 +141,7 @@ bool UIElement::AddChild() {
     return false;
   }
 
-  int16_t newElem = WindowPool::Allocate();
+  int16_t newElem = WindowPool::Allocate(t);
   if (newElem < 0) {
     Serial2.println("Failed to allocate new component");
     return false;
@@ -158,58 +160,5 @@ UIElement* UIElement::GetChild(int16_t childID) {
 
 std::uint8_t UIElement::ChildrenCount() {
   return this->childrenCount;
-}
-
-namespace WindowPool {
-  UIElement pool[MAX_WINDOWS];
-  bool inUse[MAX_WINDOWS] = {false};
-
-  static inline int16_t getNextIndex() {
-    for (int k = 0; k < MAX_WINDOWS; k++) {
-      if (!inUse[k]) {
-        return k;
-      }
-    }
-
-    return -1;
-  }
-
-  int16_t Allocate() {
-    int16_t nextIndex = getNextIndex();
-    if (nextIndex < 0) {
-      Serial2.println("Failed to allocate comp: poolIndex exceeds MAX_WINDOWS");
-      Serial2.print(  nextIndex);
-      Serial2.print(  " >= ");
-      Serial2.println(  MAX_WINDOWS);
-      return -1;
-    }
-
-    // Mark it as in use
-    inUse[nextIndex] = true;
-
-    return nextIndex;
-  }
-
-  void Deallocate(int16_t id) {
-    pool[id].SetTitle((char*)"");
-    pool[id].SetUIDimensions(UIDimensions(0, 0, 0, 0));
-    pool[id].SetUIDecorations(UIDecorations());
-
-    inUse[id] = false;
-  }
-
-  UIElement* GetHandle(int16_t id) {
-    return &pool[id];
-  }
-
-  void PrintInUse() {
-    for (int k = 0; k < MAX_WINDOWS; k++) {
-      if (inUse[k]) {
-        Serial2.print(k);
-        Serial2.print(" : ");
-        Serial2.println(inUse[k]);
-      }
-    }
-  }
 }
 

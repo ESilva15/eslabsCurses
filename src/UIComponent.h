@@ -1,20 +1,12 @@
-#ifndef __UI_COMPONENT
-#define __UI_COMPONENT
+#ifndef __UI_COMPONENT__
+#define __UI_COMPONENT__
 
 #include "Arduino_GFX.h"
+#include "values.h"
 #include "UIDecorations.h"
 #include "UIDimensions.h"
 #include <cstdint>
 #include <stdint.h>
-
-#define MAX_WINDOWS 512
-#define MAX_CHILDREN 32
-#define MAX_TITLE_LEN 32
-
-enum ComponentType {
-  STRING,
-  TABLE,
-};
 
 class UIElement {
 private:
@@ -38,7 +30,7 @@ public:
   int16_t children[MAX_CHILDREN];
 
   // Children Handling
-  bool AddChild();
+  bool AddChild(ComponentType t);
   UIElement* GetChild(int16_t childID);
   uint8_t ChildrenCount();
 
@@ -69,20 +61,6 @@ public:
   void drawBox();
   void noBox();
   void replaceString(char *oldVal, char *newVal);
-};
-
-namespace WindowPool {
-  extern UIElement pool[MAX_WINDOWS];
-  extern bool inUse[MAX_WINDOWS];
-
-  int16_t Allocate();
-  // I will finish this later on, still have to figure out how to properly
-  // destroy the UIComponent
-  void Deallocate();
-  UIElement* GetHandle(int16_t index);
-  
-  // Debugging
-  void PrintInUse();
 };
 
 #endif

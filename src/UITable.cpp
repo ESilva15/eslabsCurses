@@ -6,6 +6,7 @@
 
 #define DEBUG
 
+UITable::UITable() {};
 UITable::UITable(Arduino_GFX *gfx, UIDimensions dims, UIDecorations decor,
                  int nRows, int nCols, int *colWidths, char *title)
     : UIElement(gfx, dims, decor, title) {
