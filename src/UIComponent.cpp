@@ -21,6 +21,15 @@ UIElement::UIElement(Arduino_GFX *d, UIDimensions dims, UIDecorations decor,
   strncpy(this->title, title, MAX_TITLE_LEN);
 }
 
+UIElement::~UIElement() {
+  // Destruction involves redrawing over the "old" area
+
+  // TODO: should we have a separate place to do all the drawing?
+  this->display->fillRect(this->dims.x, this->dims.y,
+                          this->dims.width, this->dims.height,
+                          this->decor.bgColor);
+}
+
 int16_t UIElement::getContentAreaX0() {
   if (this->decor.hasBorder) {
     return this->dims.x + DEFAULT_BORDER_THICKNESS + DEFAULT_MARGIN;
@@ -132,26 +141,30 @@ void UIElement::replaceString(char *oldVal, char *newVal) {
   }
 }
 
-bool UIElement::AddChild(ComponentType t) {
+int16_t UIElement::AddChild(ComponentType t) {
   if (childrenCount >= MAX_CHILDREN) {
     Serial2.println("Failed to add child: childrenCount exceeds MAX_CHILDREN");
     Serial2.print(  childrenCount);
     Serial2.print(  " >= ");
     Serial2.print(  MAX_CHILDREN);
-    return false;
+    return -1;
   }
 
   int16_t newElem = WindowPool::Allocate(t);
   if (newElem < 0) {
     Serial2.println("Failed to allocate new component");
-    return false;
+    return -1;
   }
 
   this->children[this->curChildIndex] = newElem;
   this->childrenCount++;
   this->curChildIndex++;
 
-  return true;
+  return newElem;
+}
+
+void UIElement::RemoveChild(int16_t childId) {
+  WindowPool::Deallocate(childId);
 }
 
 UIElement* UIElement::GetChild(int16_t childID) {

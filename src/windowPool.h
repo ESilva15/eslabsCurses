@@ -1,6 +1,7 @@
 #ifndef __WINDOW_POOL__
 #define __WINDOW_POOL__
 
+#include <cstdint>
 #include <stdint.h>
 #include "values.h"
 
@@ -26,7 +27,7 @@ namespace WindowPool {
   int16_t Allocate(ComponentType t);
   // I will finish this later on, still have to figure out how to properly
   // destroy the UIComponent
-  void Deallocate();
+  void Deallocate(int16_t childID);
   UIElement* GetHandle(int16_t index);
   
   // Debugging

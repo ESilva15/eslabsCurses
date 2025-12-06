@@ -57,6 +57,7 @@ namespace WindowPool {
       case BAR:
         break;
       case STRING:
+        delete pool[id].str;
         break;
       case TABLE:
         break;

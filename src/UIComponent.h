@@ -25,12 +25,14 @@ public:
   UIElement();
   UIElement(Arduino_GFX *d, UIDimensions dims, UIDecorations decor,
             char *Title);
+  ~UIElement();
 
   // Children
   int16_t children[MAX_CHILDREN];
 
   // Children Handling
-  bool AddChild(ComponentType t);
+  int16_t AddChild(ComponentType t);
+  void RemoveChild(int16_t childID);
   UIElement* GetChild(int16_t childID);
   uint8_t ChildrenCount();
 
