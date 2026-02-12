@@ -2,6 +2,7 @@
 #define __CURSES_UI_VISUALS
 
 #include <Arduino_GFX.h>
+#include <cstdint>
 
 #define RIGHT 0
 #define INVERTED 1
@@ -21,5 +22,7 @@
 
 uint16_t calculateHeight(int16_t titleSize, int16_t textSize, int16_t nLines);
 uint16_t calculateWidth(int16_t textSize, int16_t nChars);
+void fillRect(int16_t x, int16_t y, int16_t w, int16_t h,
+              uint16_t colour, Arduino_GFX *display);
 
 #endif

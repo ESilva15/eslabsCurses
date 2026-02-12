@@ -1,5 +1,7 @@
 #include "UIDimensions.h"
 
+UIDimensions::UIDimensions() : x(0), y(0), width(0), height(0) {}
+
 UIDimensions::UIDimensions(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
     : x(x), y(y), width(w), height(h) {}
 

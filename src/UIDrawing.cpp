@@ -106,3 +106,9 @@ void UIElement::drawBox() {
                           this->dims.height, PURPLE);
 #endif
 }
+
+void fillRect(int16_t x, int16_t y, int16_t w, int16_t h, 
+              uint16_t colour, Arduino_GFX *display) {
+  // TODO: should we have a separate place to do all the drawing?
+  display->fillRect(x, y, w, h, colour);
+}

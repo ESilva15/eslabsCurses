@@ -4,6 +4,7 @@
 #include "UIString.h"
 #include "UITable.h"
 #include "values.h"
+#include "logger.h"
 
 namespace WindowPool {
   WindowEntry pool[MAX_WINDOWS];
@@ -90,9 +91,7 @@ namespace WindowPool {
   void PrintInUse() {
     for (int k = 0; k < MAX_WINDOWS; k++) {
       if (inUse[k]) {
-        Serial2.print(k);
-        Serial2.print(" : ");
-        Serial2.println(inUse[k]);
+        LOG_TRACE(F("Window in use: %d : %d\n"), k, inUse[k]);
       }
     }
   }
