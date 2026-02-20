@@ -7,7 +7,7 @@ UIBar::UIBar(Arduino_GFX *d, UIDimensions dims, UIDecorations decor,
              char *title)
     : UIElement(d, dims, decor, title) {}
 
-void UIBar::Update(char *v) {
+void UIBar::Update(const char *v, bool forceRedraw) {
   unsigned long time = millis();
   if ((time - this->lastUpdate) <= this->refreshRate) {
     return;
@@ -16,7 +16,7 @@ void UIBar::Update(char *v) {
   // Conver the string to an integer
   uint32_t newVal = atoi(v);
 
-  if (this->value == newVal) {
+  if ((this->value == newVal) && !forceRedraw) {
     // If the value hasn't changed we do not need to re-render
     return;
   }
@@ -104,3 +104,5 @@ void UIBar::Box() {
     this->display->print(legend);
   }
 }
+
+void UIBar::Redraw() {}

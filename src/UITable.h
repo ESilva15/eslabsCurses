@@ -27,6 +27,10 @@ struct UITable : UIElement {
 
   // Getters
   uint16_t getContentAreaHeight();
+
+  // Rendering
+  void Update(const char* data, bool forceRedraw) override; 
+  void Redraw() override;
 };
 
 #endif

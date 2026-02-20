@@ -9,12 +9,14 @@ struct UIElement;
 struct UIString;
 struct UIBar;
 struct UITable;
+struct UIBase;
 
 namespace WindowPool {
   struct WindowEntry {
     ComponentType type;
+    // Well I did this like this but I recon we can use polymorphism instead
     union {
-      UIElement* base;
+      UIBase* base;
       UIString* str;
       UIBar* bar;
       UITable* table;

@@ -2,6 +2,7 @@
 #include "UIComponent.h"
 #include "UIBar.h"
 #include "UIString.h"
+#include "UIBase.h"
 #include "UITable.h"
 #include "values.h"
 #include "logger.h"
@@ -43,7 +44,7 @@ namespace WindowPool {
         pool[nextIndex].table = new UITable();
         break;
       case BASE:
-        pool[nextIndex].base = new UIElement();
+        pool[nextIndex].base = new UIBase();
         break;
     }
 

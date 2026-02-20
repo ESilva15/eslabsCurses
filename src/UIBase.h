@@ -1,16 +1,15 @@
-#ifndef __UI_STRING__
-#define __UI_STRING__
+#ifndef __UI_BASE__
+#define __UI_BASE__
 
 #include "UIComponent.h"
 
 // Representation of single line strings
-struct UIString : UIElement {
+struct UIBase : UIElement {
   static const std::size_t bufferSize = 64;
   char value[bufferSize];
 
-  UIString();
-  UIString(Arduino_GFX *d, UIDimensions dims, UIDecorations decor,
-           char *title);
+  UIBase();
+  UIBase(Arduino_GFX *d, UIDimensions dims, UIDecorations decor, char *title);
   void Update(const char *value, bool forceRedraw) override;
   void Redraw() override;
 };

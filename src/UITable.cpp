@@ -76,8 +76,11 @@ void UITable::setup() {
 
 #ifdef DEBUG
       this->tableData[r * COLUMNS + c]->drawBox();
-      this->tableData[r * COLUMNS + c]->Update("---");
+      this->tableData[r * COLUMNS + c]->Update("---", false);
 #endif
     }
   }
 }
+
+void UITable::Update(const char* data, bool forceRedraw) {}
+void UITable::Redraw() {}

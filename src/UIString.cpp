@@ -15,7 +15,7 @@ UIString::UIString(Arduino_GFX *d, UIDimensions dims, UIDecorations decor,
   memset(this->value, 0, this->bufferSize);
 }
 
-void UIString::Update(const char *v) {
+void UIString::Update(const char *v, bool forceRedraw) {
   uint64_t time = millis();
   if ((time - this->lastUpdate) <= this->refreshRate) {
     return;
@@ -28,7 +28,7 @@ void UIString::Update(const char *v) {
   }
 
   // If the value hasn't changed we do not need to re-render
-  if (strcmp(this->value, v) == 0) {
+  if ((strcmp(this->value, v) == 0) && !forceRedraw) {
     return;
   }
 
@@ -45,4 +45,8 @@ void UIString::Update(const char *v) {
   // Figure out the x0 and y0 for the text
   replaceString(oldVal, newVal);
   strncpy(this->value, v, this->bufferSize);
+}
+
+void UIString::Redraw() {
+  this->Update(this->value, true);
 }

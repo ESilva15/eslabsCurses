@@ -63,6 +63,10 @@ public:
   void drawBox();
   void noBox();
   void replaceString(char *oldVal, char *newVal);
+
+  // Viewing - more like actual rendering data
+  virtual void Update(const char *data, bool forceRedraw) = 0;
+  virtual void Redraw() = 0;
 };
 
 #endif

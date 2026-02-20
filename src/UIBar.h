@@ -12,7 +12,8 @@ struct UIBar : UIElement {
   UIBar();
   UIBar(Arduino_GFX *d, UIDimensions dims, UIDecorations decor, char *title);
 
-  void Update(char *val);
+  void Update(const char *val, bool forceRedraw) override;
+  void Redraw() override;
   void DrawBar(uint32_t *oldValue, uint32_t *newValue);
   void renderBlank();
   void Box();
