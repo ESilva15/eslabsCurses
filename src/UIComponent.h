@@ -67,6 +67,9 @@ public:
   // Viewing - more like actual rendering data
   virtual void Update(const char *data, bool forceRedraw) = 0;
   virtual void Redraw() = 0;
+
+  // Type 
+  uint8_t DataType;
 };
 
 #endif

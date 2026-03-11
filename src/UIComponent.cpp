@@ -105,7 +105,7 @@ void UIElement::replaceString(char *oldVal, char *newVal) {
 
   // It crashs somewhere around here
   int16_t x0 = this->getContentAreaX0();
-  int16_t y0 = this->getContentAreaY0(); // <- Crashes here
+  int16_t y0 = this->getContentAreaY0();
   // Before here
 
   this->display->setTextSize(this->decor.textSize);
