@@ -1,21 +1,24 @@
 #include "UIGenericWindow.h"
+#include "dataContainer.h"
 
 UIGenericWindow::UIGenericWindow(
         Arduino_GFX* d, 
-        void* data, 
         RenderDelegate r,
-        IDataContainer* vp,
+        IDataContainer* dc,
         UIDimensions dims,
         UIDecorations decor,
         char* title
         ) 
-      : dataPtr(data), renderer(r), data(vp), UIElement(d, dims, decor, title) {}
+      : renderer(r), dc(dc), UIElement(d, dims, decor, title) {}
 
 void UIGenericWindow::Draw(bool forceRedraw) {
-  if (this->data->hasChanged() && !forceRedraw) {
-    // Check if this logic is correct
+  if (!this->dc->hasChanged(64) && !forceRedraw) {
     return;
   }
 
-  this->renderer(this->display, this->dims, this->dataPtr);
+  this->renderer(this, this->dims, this->dc);
+}
+
+void UIGenericWindow::SetDataContainer(IDataContainer* container) {
+  this->dc = container;
 }

@@ -4,19 +4,15 @@
 #include "dataContainer.h"
 #include "stdlib.h"
 
-void RenderString(UIElement* caller, UIDimensions dims, void* dataContainer) {
-  StrContainer* container = (StrContainer*)dataContainer;
-
-  char* oldVal = (char*)container->GetPrevValue();
-  char* newVal = (char*)container->GetCurrentValue();
+void RenderString(UIElement* caller, UIDimensions dims, IDataContainer* dataContainer) {
+  char* oldVal = (char*)dataContainer->GetPrevValue();
+  char* newVal = (char*)dataContainer->GetValue();
 
   size_t newValLen = strlen(newVal);
   size_t oldValLen = strlen(oldVal);
 
-  // It crashs somewhere around here
   int16_t x0 = caller->getContentAreaX0();
   int16_t y0 = caller->getContentAreaY0();
-  // Before here
 
   caller->display->setTextSize(caller->decor.textSize);
 
@@ -49,14 +45,5 @@ void RenderString(UIElement* caller, UIDimensions dims, void* dataContainer) {
   }
 }
 
-// template <typename T>
-// void RenderInt(Arduino_GFX* d, UIDimensions dims, void* data) {
-//   static char buf[21];
-//
-//   T val = *(T*)data;
-//
-//   ltoa((long)val, buf, 10);
-//
-//   d->setCursor(dims.x, dims.y);
-//   d->print(buf);
-// }
+void RenderBar(UIElement* caller, UIDimensions dims, IDataContainer* dataContainer) {
+}

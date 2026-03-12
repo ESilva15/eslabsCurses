@@ -3,7 +3,10 @@
 
 #include "UIDimensions.h"
 #include "UIComponent.h"
+#include "dataContainer.h"
 
-void RenderString(UIElement* caller, UIDimensions dims, void* data);
+typedef void (*RenderDelegate)(UIElement* caller, UIDimensions dims, IDataContainer* dc);
+
+void RenderString(UIElement* caller, UIDimensions dims, IDataContainer* data);
 
 #endif
