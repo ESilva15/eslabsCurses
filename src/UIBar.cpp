@@ -1,11 +1,17 @@
 #include "UIBar.h"
 #include "UIComponent.h"
 #include "UIDrawing.h"
+#include <stdio.h>
 
-UIBar::UIBar() {};
+UIBar::UIBar() {
+  this->type = BAR;
+};
+
 UIBar::UIBar(Arduino_GFX *d, UIDimensions dims, UIDecorations decor,
              char *title)
-    : UIElement(d, dims, decor, title) {}
+    : UIElement(d, dims, decor, title) {
+  this->type = BAR;
+}
 
 void UIBar::Update(const char *v, bool forceRedraw) {
   unsigned long time = millis();
@@ -68,7 +74,7 @@ void UIBar::renderBlank() {
   this->display->print("!RANGE");
 }
 
-void UIBar::Box() {
+void UIBar::drawBox() {
   // If the range was not set, we cannot draw our ruler
   if (this->range <= 0) {
     this->renderBlank();
@@ -105,4 +111,8 @@ void UIBar::Box() {
   }
 }
 
-void UIBar::Redraw() {}
+void UIBar::Redraw() {
+  char val[8];
+  sprintf(val, "%d", this->value);
+  this->Update(val, true);
+}

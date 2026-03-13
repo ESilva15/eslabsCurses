@@ -2,6 +2,7 @@
 #define _UI_BAR
 
 #include "UIComponent.h"
+#include "values.h"
 
 struct UIBar : UIElement {
   // This might be the only when where its more efficient to have the data
@@ -16,7 +17,7 @@ struct UIBar : UIElement {
   void Redraw() override;
   void DrawBar(uint32_t *oldValue, uint32_t *newValue);
   void renderBlank();
-  void Box();
+  void drawBox();
 };
 
 #endif

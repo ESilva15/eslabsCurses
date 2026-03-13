@@ -1,4 +1,5 @@
 #include "windowPool.h"
+#include "logger.h"
 #include "UIComponent.h"
 #include "UIBar.h"
 #include "UIString.h"
@@ -24,10 +25,8 @@ namespace WindowPool {
   int16_t Allocate(ComponentType t) {
     int16_t nextIndex = getNextIndex();
     if (nextIndex < 0) {
-      Serial2.println("Failed to allocate comp: poolIndex exceeds MAX_WINDOWS");
-      Serial2.print(  nextIndex);
-      Serial2.print(  " >= ");
-      Serial2.println(  MAX_WINDOWS);
+      LOG_ERROR(F("Failed to allocate comp: poolIndex exceeds MAX_WINDOWS\r\n"));
+      LOG_ERROR(F("    %d >= %d\r\n"), nextIndex, MAX_WINDOWS);
       return -1;
     }
 
@@ -35,7 +34,9 @@ namespace WindowPool {
 
     switch(pool[nextIndex].type) {
       case BAR:
+        LOG_DEBUG(F("PRE allocing\r\n"));
         pool[nextIndex].bar = new UIBar();
+        LOG_DEBUG(F("POST allocing type: \r\n"), pool[nextIndex].type);
         break;
       case STRING:
         pool[nextIndex].str = new UIString();

@@ -1,5 +1,6 @@
 #include "UIComponent.h"
 #include "values.h"
+#include "logger.h"
 #include "windowPool.h"
 // #include "u8g2.h"
 #include "Arduino.h"
@@ -141,18 +142,17 @@ void UIElement::replaceString(char *oldVal, char *newVal) {
 
 int16_t UIElement::AddChild(ComponentType t) {
   if (childrenCount >= MAX_CHILDREN) {
-    Serial2.println("Failed to add child: childrenCount exceeds MAX_CHILDREN");
-    Serial2.print(  childrenCount);
-    Serial2.print(  " >= ");
-    Serial2.print(  MAX_CHILDREN);
+    LOG_ERROR(F("Failed to add child: childrenCount exceeds MAX_CHILDREN\r\n"));
+    LOG_ERROR(F("    %d >= %d\r\n"), childrenCount, MAX_CHILDREN);
     return -1;
   }
 
   int16_t newElem = WindowPool::Allocate(t);
   if (newElem < 0) {
-    Serial2.println("Failed to allocate new component");
+    LOG_ERROR(F("Failed to allocate new component\r\n"));
     return -1;
   }
+  LOG_DEBUG(F("Successfully allocated component: %d\r\n"), newElem);
 
   this->children[this->curChildIndex] = newElem;
   this->childrenCount++;
@@ -172,4 +172,3 @@ UIElement* UIElement::GetChild(int16_t childID) {
 std::uint8_t UIElement::ChildrenCount() {
   return this->childrenCount;
 }
-
