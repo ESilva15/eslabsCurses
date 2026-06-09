@@ -24,7 +24,6 @@ UIElement::UIElement(Arduino_GFX *d, UIDimensions dims, UIDecorations decor,
 
 UIElement::~UIElement() {
   // Destruction involves redrawing over the "old" area
-  
   fillRect(this->dims.x, this->dims.y, this->dims.width, this->dims.height, 
            this->decor.bgColor, this->display);
 }

@@ -1,6 +1,7 @@
 #include "UIBar.h"
 #include "UIComponent.h"
 #include "UIDrawing.h"
+#include <cstdint>
 #include <stdio.h>
 
 UIBar::UIBar() {
@@ -11,6 +12,25 @@ UIBar::UIBar(Arduino_GFX *d, UIDimensions dims, UIDecorations decor,
              char *title)
     : UIElement(d, dims, decor, title) {
   this->type = BAR;
+}
+
+UIBar::~UIBar() {
+  // height taking the rule into account
+  // NOTE: need to clean this all up the 7s and 2 and whatever
+  int16_t charWidth = CHR_WIDTH(this->decor.textSize);
+  int16_t textHeight = 8 * this->decor.textSize;
+  int16_t totalHeight = this->dims.height + 7 + 2 + textHeight;
+  int16_t totalX = this->dims.x - (charWidth / 2);
+  int16_t totalWidth = this->dims.width + charWidth;
+
+
+  this->display->fillRect(
+      totalX, 
+      this->dims.y, 
+      totalWidth, 
+      totalHeight, 
+      this->decor.bgColor
+  );
 }
 
 void UIBar::Update(const char *v, bool forceRedraw) {
@@ -101,6 +121,7 @@ void UIBar::drawBox() {
     this->display->setTextColor(RED);
     this->display->drawFastVLine(x, this->dims.y + this->dims.height, 7, RED);
 
+    // NOTE: this may fill here due to insuficcient memory?
     char legend[5];
     sprintf(legend, "%d", k);
     this->display->setCursor(x - (CHR_WIDTH(this->decor.textSize) / 2),

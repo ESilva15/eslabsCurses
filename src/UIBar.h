@@ -11,6 +11,7 @@ struct UIBar : UIElement {
   uint8_t range = 0;  // define the tach range, ie: 8 for 8000rpm
 
   UIBar();
+  ~UIBar() override;
   UIBar(Arduino_GFX *d, UIDimensions dims, UIDecorations decor, char *title);
 
   void Update(const char *val, bool forceRedraw) override;

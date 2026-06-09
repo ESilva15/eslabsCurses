@@ -25,7 +25,7 @@ public:
   UIElement();
   UIElement(Arduino_GFX *d, UIDimensions dims, UIDecorations decor,
             char *Title);
-  ~UIElement();
+  virtual ~UIElement();
 
   // Children
   int16_t children[MAX_CHILDREN];

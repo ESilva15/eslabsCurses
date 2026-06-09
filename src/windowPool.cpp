@@ -56,8 +56,10 @@ namespace WindowPool {
   }
 
   void Deallocate(int16_t id) {
+    // NOTE: I don't think we need this since it calls the destructor...
     switch(pool[id].type) {
       case BAR:
+        delete pool[id].str;
         break;
       case STRING:
         delete pool[id].str;
